@@ -7,6 +7,9 @@ from data_loader import create_dataloader
 from glob import glob
 from models.SRGAN_model import SRGANModel
 import torch
+import wandb
+
+wandb.init(project="Face-High-Res-For-Warping")
 
 
 def main():
@@ -58,8 +61,10 @@ def main():
     parser.add_argument('--D_nf', type=int, default=32)
 
     # data dir
-    parser.add_argument('--hr_path', type=list, default=['data/celebahq-512/', 'data/ffhq-512/'])
-    parser.add_argument('--lr_path', type=str, default='data/lr-128/')
+    # parser.add_argument('--hr_path', type=list, default=['data/celebahq-512/', 'data/ffhq-512/'])
+    # parser.add_argument('--lr_path', type=str, default='data/lr-128/')
+    parser.add_argument('--hr_path', type=list, default=['/home/vuthede/Desktop/3D/ref'])
+    parser.add_argument('--lr_path', type=str, default='/home/vuthede/Desktop/3D/input')
     parser.add_argument('--checkpoint_dir', type=str, default='check_points/ESRGAN-V1/')
     parser.add_argument('--val_dir', type=str, default='dev_show')
     parser.add_argument('--training_state', type=str, default='check_points/ESRGAN-V1/state/')
@@ -72,6 +77,10 @@ def main():
     parser.add_argument('--setting_file', type=str, default='setting.txt')
     parser.add_argument('--log_file', type=str, default='log.txt')
     args = check_args(parser.parse_args())
+
+
+    wandb.config.update(args)
+
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_ids
 
     #### loading resume state if exists

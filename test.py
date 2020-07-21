@@ -58,7 +58,7 @@ def get_FaceSR_opt():
     parser.add_argument('--D_nf', type=int, default=64)
 
     # data dir
-    parser.add_argument('--pretrain_model_G', type=str, default='90000_G.pth')
+    parser.add_argument('--pretrain_model_G', type=str, default='checkpoints/200000_G.pth')
     parser.add_argument('--pretrain_model_D', type=str, default=None)
 
     args = parser.parse_args()
@@ -79,9 +79,9 @@ def sr_forward(img, padding=0.5, moving=0.1):
     rec_img = face_recover(output_img, M * 4, img)
     return output_img, rec_img
 
-img_path = 'input.jpg'
+img_path = 'lowres.png'
 img = utils.read_cv2_img(img_path)
 output_img, rec_img = sr_forward(img)
-utils.save_image(output_img, 'output_face.jpg')
-utils.save_image(rec_img, 'output_img.jpg')
+utils.save_image(output_img, 'highres200000.png')
+utils.save_image(rec_img, 'highres_rec_200000.png')
 

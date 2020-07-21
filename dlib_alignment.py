@@ -4,7 +4,7 @@ from skimage import transform as trans
 import dlib
 
 dlib_detector = dlib.get_frontal_face_detector()
-sp = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
+sp = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
 
 def face_recover(img, M, ori_img):

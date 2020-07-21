@@ -10,6 +10,7 @@ from models.modules.loss import GANLoss
 
 
 logger = logging.getLogger('base')
+import wandb
 
 
 class SRGANModel(BaseModel):
@@ -184,6 +185,12 @@ class SRGANModel(BaseModel):
         self.log_dict['l_d_fake'] = l_d_fake.item()
         self.log_dict['D_real'] = torch.mean(pred_d_real.detach())
         self.log_dict['D_fake'] = torch.mean(pred_d_fake.detach())
+
+        wandb.log({'metric/l_d_real': self.log_dict['l_d_real']})
+        wandb.log({'metric/l_d_fake': self.log_dict['l_d_fake']})
+        wandb.log({'metric/D_real': self.log_dict['D_real']})
+        wandb.log({'metric/D_fake': self.log_dict['D_fake']})
+
 
     def test(self):
         self.netG.eval()
