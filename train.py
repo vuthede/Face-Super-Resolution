@@ -17,7 +17,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu_ids', type=str, default='0,1,2,3,4,5,6,7')
 
-    parser.add_argument('--batch_size', type=int, default=32)
+    parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--dev_ratio', type=float, default=0.01)
     parser.add_argument('--lr_G', type=float, default=1e-4)
     parser.add_argument('--weight_decay_G', type=float, default=0)
@@ -63,8 +63,8 @@ def main():
     # data dir
     # parser.add_argument('--hr_path', type=list, default=['data/celebahq-512/', 'data/ffhq-512/'])
     # parser.add_argument('--lr_path', type=str, default='data/lr-128/')
-    parser.add_argument('--hr_path', type=list, default=['/home/vuthede/Desktop/3D/ref'])
-    parser.add_argument('--lr_path', type=str, default='/home/vuthede/Desktop/3D/input')
+    parser.add_argument('--hr_path', type=list, default=['/home/ubuntu/train_data/highres'])
+    parser.add_argument('--lr_path', type=str, default='/home/ubuntu/train_data/lowres_warp2d')
     parser.add_argument('--checkpoint_dir', type=str, default='check_points/ESRGAN-V1/')
     parser.add_argument('--val_dir', type=str, default='dev_show')
     parser.add_argument('--training_state', type=str, default='check_points/ESRGAN-V1/state/')
@@ -93,13 +93,16 @@ def main():
 
     # load dataset
     total_img_list = []
+    print("Hr_path: ", args.hr_path)
     for hr_path in args.hr_path:
         total_img_list.extend(glob(hr_path + '/*'))
+
 
     random.shuffle(total_img_list)
     dev_list = total_img_list[:int(len(total_img_list) * args.dev_ratio)]
     train_list = total_img_list[int(len(total_img_list) * args.dev_ratio):]
-
+    print("Train list len: ", len(train_list))
+    print("train list 0", train_list[0])
     train_loader = create_dataloader(args, train_list, is_train=True, n_threads=len(args.gpu_ids.split(',')))
     dev_loader = create_dataloader(args, dev_list, is_train=False, n_threads=len(args.gpu_ids.split(',')))
 
